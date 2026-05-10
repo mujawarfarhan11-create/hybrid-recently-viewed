@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "../lib/db";
 
 export async function POST(req) {
-  await connectDB();
 
   const { userId, localData } = await req.json();
 
