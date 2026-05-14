@@ -22,6 +22,12 @@ export default function Home() {
     }
   }, []);
 
+  const sendNotification = (title: string, message: any) => {
+    if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+      new Notification(title, { body: message });
+    }
+  };
+
   const handleView = async (productId: string) => {
     let items = JSON.parse(localStorage.getItem("recent") || "[]");
 
@@ -42,6 +48,10 @@ export default function Home() {
 
     const data = await res.json();
     setRecent(data);
+    sendNotification("Product Viewed", `You viewed product ${productId}`);
+    setTimeout(() => {
+      sendNotification("Reminder", "Come back and check your recently viewed products!");
+    }, 5000);
   };
 
   const toggleTheme = () => {
@@ -49,7 +59,6 @@ export default function Home() {
     setTheme(themes[newTheme]);
     localStorage.setItem("theme", newTheme);
   };
-
   const handleLogin = async () => {
     alert("Login Clicked");
 
@@ -76,7 +85,7 @@ export default function Home() {
   ];
 
   return (
-    
+
     <div style={{ padding: "20px", background: theme.background, minHeight: "100vh", color: theme.text }}>
       <button
         onClick={toggleTheme}
@@ -88,6 +97,17 @@ export default function Home() {
       >
         Toggle Theme
       </button>
+
+      <button
+        onClick={async () => {
+          const permission = await Notification.requestPermission();
+          alert("Permission: " + permission);
+        }}
+        style={{ marginBottom: "10px", padding: "10px" }}
+      >
+        Enable Notifications
+      </button>
+
       <h1>Products</h1>
       <div style={{ display: "flex", gap: "15px" }}>
         {products.map((p) => (
@@ -141,7 +161,6 @@ export default function Home() {
         ))}
       </div>
 
-      {/* LOGIN BUTTON */}
       <button
         onClick={handleLogin}
         style={{
