@@ -1,13 +1,25 @@
 "use client";
 import { useState, useEffect } from "react";
+import { themes } from "./theme/theme";
 
 export default function Home() {
+  const [theme, setTheme] = useState(themes.light);
   const [recent, setRecent] = useState<any[]>([]);
 
-  // Load from localStorage on page load
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("recent") || "[]");
     setRecent(items);
+  }, []);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
+      setTheme(themes[savedTheme]);
+    } else {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      setTheme(prefersDark ? themes.dark : themes.light);
+    }
   }, []);
 
   const handleView = async (productId: string) => {
@@ -30,6 +42,12 @@ export default function Home() {
 
     const data = await res.json();
     setRecent(data);
+  };
+
+  const toggleTheme = () => {
+    const newTheme = theme === themes.light ? "dark" : "light";
+    setTheme(themes[newTheme]);
+    localStorage.setItem("theme", newTheme);
   };
 
   const handleLogin = async () => {
@@ -58,9 +76,19 @@ export default function Home() {
   ];
 
   return (
-    <div style={{ padding: "20px", background: "#0f172a", minHeight: "100vh", color: "white" }}>
+    
+    <div style={{ padding: "20px", background: theme.background, minHeight: "100vh", color: theme.text }}>
+      <button
+        onClick={toggleTheme}
+        style={{
+          marginBottom: "15px",
+          padding: "10px",
+          cursor: "pointer"
+        }}
+      >
+        Toggle Theme
+      </button>
       <h1>Products</h1>
-
       <div style={{ display: "flex", gap: "15px" }}>
         {products.map((p) => (
           <div
@@ -71,7 +99,7 @@ export default function Home() {
               borderRadius: "12px",
               width: "140px",
               textAlign: "center",
-              background: "#1e293b",
+              background: theme.card,
               boxShadow: "0 4px 10px rgba(0,0,0,0.3)"
             }}
           >
@@ -103,8 +131,8 @@ export default function Home() {
             key={index}
             style={{
               border: "1px solid #334155",
-              background: "#020617",
-              padding: "10px",
+              background: theme.card,
+              padding: "20px",
               borderRadius: "8px",
             }}
           >
@@ -119,8 +147,8 @@ export default function Home() {
         style={{
           marginTop: "20px",
           padding: "10px",
-          background: "linear-gradient(45deg, #22c55e, #4ade80)",
-          color: "black",
+          background: theme.button,
+          color: theme.text,
           cursor: "pointer",
           borderRadius: "8px",
           border: "none",
