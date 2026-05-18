@@ -175,6 +175,43 @@ export default function Home() {
       >
         Login (Merge Data)
       </button>
+      
+        <div style={{ marginTop: "30px" }}>
+  <a href="/transactions">
+    <button
+      style={{
+        padding: "10px",
+        display: "block",
+        cursor: "pointer",
+        background: "linear-gradient(45deg, #10b981, #3b82f6)",
+        color: "white",
+        border: "none",
+        borderRadius: "5px",
+      }}
+    >
+      Go to Transactions
+    </button>
+  </a>
+</div>
+
+<a href="/cart">
+  <button
+    style={{
+      position: "absolute",
+      top: "20px",
+      right: "20px",
+      padding: "8px 12px",
+      borderRadius: "10px",
+      border: "none",
+      background: "#3b82f6",
+      color: "white",
+      cursor: "pointer"
+    }}
+  >
+    Cart 
+  </button>
+</a>
+
     </div>
   );
 }

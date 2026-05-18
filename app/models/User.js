@@ -1,13 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  userId: String,
-  recentlyViewed: [
-    {
-      productId: String,
-      viewedAt: Date
-    }
-  ]
-});
-
-export default mongoose.models.User || mongoose.model("User", userSchema);
+export const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) return;
+  await mongoose.connect("mongodb://127.0.0.1:27017/cartDB");
+};

@@ -38,7 +38,6 @@ export async function POST(req) {
 
   result = result.slice(0, 20);
 
-  // Update DB
   user.recentlyViewed = result.map(item => ({
     productId: item.productId,
     viewedAt: new Date(item.viewedAt)
